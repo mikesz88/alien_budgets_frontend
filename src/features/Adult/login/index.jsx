@@ -1,9 +1,5 @@
-import React from 'react'
+import React from 'react';
 
-const AdultLogin = () => {
-  return (
-    <div>AdultLogin</div>
-  )
-}
+const AdultLogin = () => <div>AdultLogin</div>;
 
 export default AdultLogin;

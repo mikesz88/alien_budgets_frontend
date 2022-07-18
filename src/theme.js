@@ -1,4 +1,3 @@
-
 const theme = {
   colors: {
     lightBlue: '#88C9EF',

@@ -10,14 +10,13 @@ import StudentLogin from './features/Student/login';
 
 const App = () => (
   <ThemeProvider theme={theme}>
-    {/* test */}
     <Router>
       <Routes>
         <Route path="/" element={<Hero />} exact />
         <Route path="/student" element={<Student />} exact />
-        <Route path="/student/login" element={<StudentLogin />} exact />
+        <Route path="/login/student" element={<StudentLogin />} exact />
         <Route path="/adult" element={<Adult />} exact />
-        <Route path="/adult/login" element={<AdultLogin />} exact />
+        <Route path="/login/adult" element={<AdultLogin />} exact />
       </Routes>
     </Router>
   </ThemeProvider>

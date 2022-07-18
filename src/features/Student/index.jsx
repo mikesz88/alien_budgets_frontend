@@ -1,9 +1,5 @@
-import React from 'react'
+import React from 'react';
 
-const Student = () => {
-  return (
-    <div>Student</div>
-  )
-}
+const Student = () => <div>Student</div>;
 
-export default Student
+export default Student;
