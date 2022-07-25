@@ -1,12 +1,13 @@
 const theme = {
+  fontFamily: {
+    hind: `'Hind', sans-serif`,
+    creepster: `'Creepster', cursive`,
+    nosifer: `'Nosifer', cursive`,
+  },
   colors: {
-    lightBlue: '#88C9EF',
-    neutralBlue: '#2C3DBD',
-    darkBlue: '#3E1BED',
-    salmon: '#FE978A',
-    orange: 'FF6F50',
-    homeBackground: '#F8F3F3',
-    white: '#FFF',
+    primaryBlue: '#2745F2',
+    lightGrey: '#F2F2F2',
+    yellow: '#F7E57B',
   },
 };
 

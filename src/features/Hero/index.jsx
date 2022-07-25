@@ -1,53 +1,51 @@
 import React, { useState } from 'react';
 import Student from './Student';
 import Adult from './Adult';
+import Introduction from './Introduction';
+import theme from '../../theme';
 
 const Hero = () => {
   const [adult, setAdult] = useState(false);
   const [student, setStudent] = useState(false);
+  const [intro, setIntro] = useState(true);
 
   const chooseAdult = () => {
     setStudent(false);
+    setIntro(false);
     setAdult(true);
   };
 
   const chooseStudent = () => {
     setAdult(false);
+    setIntro(false);
     setStudent(true);
   };
 
+  const chooseIntro = () => {
+    setAdult(false);
+    setStudent(false);
+    setIntro(true);
+  };
+
   return (
-    <>
-      {!adult && !student && (
-        <div
-          style={{
-            height: '100vh',
-            width: '100vw',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
-        >
-          <div>ALIEN BUDGETS</div>
-          <div>WILL YOU GO BROKE OR WILL YOU BE SUCCESSFUL?</div>
-          <div>Who are you</div>
-          <div>
-            <button type="button" onClick={() => chooseStudent()}>
-              Student
-            </button>
-            <button type="button" onClick={() => chooseAdult()}>
-              Adult
-            </button>
-          </div>
-        </div>
+    <div
+      style={{
+        backgroundColor: theme.colors.lightGrey,
+        height: '100vh',
+        width: '100vw',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        padding: '1rem',
+      }}
+    >
+      {intro && (
+        <Introduction chooseAdult={chooseAdult} chooseStudent={chooseStudent} />
       )}
-      {adult ? (
-        <Adult chooseAdult={chooseAdult} chooseStudent={chooseStudent} />
-      ) : (
-        <Student chooseAdult={chooseAdult} chooseStudent={chooseStudent} />
-      )}
-    </>
+      {adult && <Adult chooseStudent={chooseStudent} intro={chooseIntro} />}
+      {student && <Student chooseAdult={chooseAdult} intro={chooseIntro} />}
+    </div>
   );
 };
 
