@@ -18,11 +18,16 @@ const StyledLink = styled(Link)`
   margin: 1rem;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.yellow};
     border-color: ${({ theme }) => theme.colors.yellow};
     color: ${({ theme }) => theme.colors.primaryBlue};
+  }
+
+  @media (max-width: 426px) {
+    font-size: 1rem;
   }
 `;
 

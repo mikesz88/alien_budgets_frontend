@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Student from './Student';
 import Adult from './Adult';
 import Introduction from './Introduction';
-import theme from '../../theme';
+import HeroScreenDivWrapper from '../../components/Hero/HeroScreenDivWrapper';
 
 const Hero = () => {
   const [adult, setAdult] = useState(false);
@@ -28,24 +28,13 @@ const Hero = () => {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: theme.colors.lightGrey,
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        padding: '1rem',
-      }}
-    >
+    <HeroScreenDivWrapper>
       {intro && (
         <Introduction chooseAdult={chooseAdult} chooseStudent={chooseStudent} />
       )}
       {adult && <Adult chooseStudent={chooseStudent} intro={chooseIntro} />}
       {student && <Student chooseAdult={chooseAdult} intro={chooseIntro} />}
-    </div>
+    </HeroScreenDivWrapper>
   );
 };
 
