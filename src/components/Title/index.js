@@ -5,6 +5,7 @@ const StyledTitle = styled.h1`
   color: ${({ theme }) => theme.colors.primaryBlue};
   font-size: 8rem;
   text-align: center;
+  margin: 0;
 
   @media (max-width: 426px) {
     font-size: 3rem;

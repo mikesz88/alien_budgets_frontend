@@ -12,8 +12,11 @@ import theme from './theme';
 import Hero from './features/Hero';
 import Student from './features/Student';
 import Adult from './features/Adult';
-import AdultLogin from './features/Adult/login';
-import StudentLogin from './features/Student/login';
+import AdultLogin from './features/Adult/Login';
+import StudentLogin from './features/Student/Login';
+import RegisterStudent from './features/Student/Register';
+import RegisterAdult from './features/Adult/Register';
+import GuestUser from './features/GuestUser';
 
 export const UserContext = createContext();
 
@@ -53,7 +56,10 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Hero />} exact />
           <Route path="/login/student" element={<StudentLogin />} exact />
+          <Route path="/register/student" element={<RegisterStudent />} exact />
+          <Route path="/register/adult" element={<RegisterAdult />} exact />
           <Route path="/login/adult" element={<AdultLogin />} exact />
+          <Route path="/guestUser" element={<GuestUser />} exact />
           <Route
             path="/student"
             element={
