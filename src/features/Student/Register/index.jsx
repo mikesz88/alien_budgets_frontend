@@ -1,32 +1,48 @@
-import React from 'react';
-import { Form, Input, Select } from 'antd';
+/* eslint-disable import/no-cycle */
+import React, { useState, useContext, useEffect } from 'react';
+import { Form, Input, Modal, Radio, Select } from 'antd';
+import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons';
 import StyledTitle from '../../../components/Title';
 import StyledButton from '../../../components/PrimaryButton';
+import Avatar from '../../../components/Avatar';
+import { UserContext } from '../../../App';
 
 const RegisterStudent = () => {
+  const { avatarService } = useContext(UserContext);
+  const [avatarUsernameModal, setAvatarUsernameModal] = useState(false);
+  const [avatarModal, setAvatarModal] = useState(false);
+  const [avatarList, setAvatarList] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [userAvatar, setUserAvatar] = useState(
+    'https://alienbudgets.s3.amazonaws.com/001-cat.png'
+  );
   const [form] = Form.useForm();
 
-  const forgotPassQuestionCHange = (value) => {
-    switch (value) {
-      case 'Test1':
-        form.setFieldsValue({
-          note: 'Test1',
-        });
-        break;
-      case 'Test2':
-        form.setFieldsValue({
-          note: 'Test2',
-        });
-        break;
-      case 'Test3':
-        form.setFieldsValue({
-          note: 'Test3',
-        });
-        break;
+  console.log(Number(2));
 
-      default:
-        break;
-    }
+  useEffect(() => {
+    avatarService
+      .getAvatarList()
+      .then(() => {
+        setAvatarList(avatarService.avatarList);
+      })
+      .catch((error) => {
+        setAvatarList(error);
+        // Notification
+      });
+  }, []);
+
+  const forgotPassQuestionChange = (value) => {
+    form.setFieldsValue({
+      note: value,
+    });
+  };
+
+  const handleAvatarChange = ({ target: { value } }) => {
+    form.setFieldsValue({
+      note: value,
+    });
+    setUserAvatar(value);
   };
 
   const onFinish = (values) => {
@@ -147,7 +163,7 @@ const RegisterStudent = () => {
         >
           <Select
             placeholder="Forgot Password Question"
-            onChange={forgotPassQuestionCHange}
+            onChange={forgotPassQuestionChange}
             allowClear
           >
             <Select.Option key="test1" value="test1">
@@ -173,6 +189,14 @@ const RegisterStudent = () => {
         >
           <Input type="text" placeholder="Forgot Password Answer" />
         </Form.Item>
+        <Form.Item>
+          <StyledButton
+            onClick={() => setAvatarUsernameModal(!avatarUsernameModal)}
+            type="primary"
+          >
+            Choose Avatar & Username
+          </StyledButton>
+        </Form.Item>
         {/* Classroom Code */}
         {/* Avatar and Username */}
         <Form.Item register="true" style={{ textAlign: 'center' }}>
@@ -187,6 +211,105 @@ const RegisterStudent = () => {
           </StyledButton>
         </Form.Item>
       </Form>
+      <Modal
+        title="Choose Avatar and Username"
+        visible={avatarUsernameModal}
+        onCancel={() => setAvatarUsernameModal(false)}
+        footer={[
+          <StyledButton
+            key="ok"
+            type="primary"
+            onClick={() => setAvatarUsernameModal(false)}
+          >
+            OK
+          </StyledButton>,
+        ]}
+      >
+        <>
+          <Avatar
+            avatar={{
+              avatarName: userAvatar,
+              avatarColor: 'rgb(122, 60, 13)',
+            }}
+            size="large"
+          />
+          <StyledButton
+            type="primary"
+            onClick={() => setAvatarModal(!avatarModal)}
+          >
+            Choose Avatar
+          </StyledButton>
+          <Form form={form}>
+            <Form.Item
+              name="username"
+              hasFeedback
+              rules={[
+                {
+                  type: 'text',
+                  required: true,
+                  message: 'Please input your username.',
+                },
+                {
+                  pattern: /[a-zA-Z]{3,}/gm,
+                  required: true,
+                  message: 'Must be minimum 3 letters.',
+                },
+              ]}
+            >
+              <Input type="text" placeholder="Username" />
+            </Form.Item>
+          </Form>
+        </>
+      </Modal>
+      <Modal
+        title="Choose Avatar"
+        visible={avatarModal}
+        onCancel={() => setAvatarModal(false)}
+        width={1000}
+        footer={[
+          <StyledButton
+            key="ok"
+            type="primary"
+            onClick={() => setAvatarModal(false)}
+          >
+            Done
+          </StyledButton>,
+        ]}
+      >
+        <Form form={form}>
+          <Form.Item>
+            <Radio.Group
+              onChange={handleAvatarChange}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+              }}
+            >
+              {avatarList.map((avatarIcon) => (
+                <Radio.Button
+                  style={{ height: '100%', margin: '1rem' }}
+                  key={avatarIcon.avatarURL}
+                  value={avatarIcon.avatarURL}
+                >
+                  <Avatar
+                    onClick={() => setUserAvatar(avatarIcon.avatarURL)}
+                    key={avatarIcon.avatarURL}
+                    avatar={{
+                      avatarName: avatarIcon.avatarURL,
+                      avatarColor: 'rgb(122, 60, 13)',
+                    }}
+                    size="large"
+                  />
+                </Radio.Button>
+              ))}
+            </Radio.Group>
+            <LeftCircleFilled />
+            <RightCircleFilled />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };

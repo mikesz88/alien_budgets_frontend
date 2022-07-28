@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-unused-vars */
 import React, { useState, createContext, useContext } from 'react';
 import { ThemeProvider } from 'styled-components';
@@ -17,13 +18,16 @@ import StudentLogin from './features/Student/Login';
 import RegisterStudent from './features/Student/Register';
 import RegisterAdult from './features/Adult/Register';
 import GuestUser from './features/GuestUser';
+import AvatarService from './services/avatarService';
 
+const avatarService = new AvatarService();
 export const UserContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const context = {
     // authService,
     // bookService,
+    avatarService,
     updateService: () => setContextServices({ ...contextServices }),
   };
 
