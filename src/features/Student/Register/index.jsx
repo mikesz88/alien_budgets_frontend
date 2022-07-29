@@ -1,7 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { useState, useContext, useEffect } from 'react';
-import { Form, Input, Modal, Radio, Select } from 'antd';
-import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons';
+import { Form, Input, Modal, Pagination, Radio, Select } from 'antd';
 import StyledTitle from '../../../components/Title';
 import StyledButton from '../../../components/PrimaryButton';
 import Avatar from '../../../components/Avatar';
@@ -12,23 +11,48 @@ const RegisterStudent = () => {
   const [avatarUsernameModal, setAvatarUsernameModal] = useState(false);
   const [avatarModal, setAvatarModal] = useState(false);
   const [avatarList, setAvatarList] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [userAvatar, setUserAvatar] = useState(
-    'https://alienbudgets.s3.amazonaws.com/001-cat.png'
-  );
+  const [userAvatar, setUserAvatar] = useState({});
+  const [pagination, setPagination] = useState({
+    total: '',
+    totalPages: '',
+    page: '',
+    prevPage: '',
+    nextPage: '',
+  });
   const [form] = Form.useForm();
 
-  console.log(Number(2));
-
-  useEffect(() => {
+  const getAvatarList = (page) => {
     avatarService
-      .getAvatarList()
-      .then(() => {
-        setAvatarList(avatarService.avatarList);
+      .getAvatarList(page)
+      .then((res) => {
+        console.log(res);
+        setAvatarList(res.data);
+        setPagination({
+          total: res.pagination.total,
+          totalPages: res.pagination.totalPages,
+          page: res.pagination.page,
+          prevPage: res.pagination.prev ? res.pagination.prev.page : 10,
+          nextPage: res.pagination.next ? res.pagination.next.page : 1,
+        });
+        // Notification
       })
       .catch((error) => {
         setAvatarList(error);
+        throw error;
         // Notification
+      });
+  };
+
+  useEffect(() => {
+    getAvatarList();
+    avatarService
+      .getRandomAvatar()
+      .then((res) => {
+        setUserAvatar(res);
+      })
+      .catch((error) => {
+        setUserAvatar(error);
+        throw error;
       });
   }, []);
 
@@ -40,9 +64,12 @@ const RegisterStudent = () => {
 
   const handleAvatarChange = ({ target: { value } }) => {
     form.setFieldsValue({
-      note: value,
+      avatar: value,
     });
-    setUserAvatar(value);
+    setUserAvatar((prevState) => ({
+      ...prevState,
+      avatarURL: value,
+    }));
   };
 
   const onFinish = (values) => {
@@ -154,6 +181,7 @@ const RegisterStudent = () => {
         </Form.Item>
         <Form.Item
           name="forgotPasswordQuestion"
+          hasFeedback
           rules={[
             {
               required: true,
@@ -179,6 +207,7 @@ const RegisterStudent = () => {
         </Form.Item>
         <Form.Item
           name="forgotPasswordAnswer"
+          hasFeedback
           register="true"
           rules={[
             {
@@ -228,7 +257,7 @@ const RegisterStudent = () => {
         <>
           <Avatar
             avatar={{
-              avatarName: userAvatar,
+              avatarName: userAvatar.avatarURL,
               avatarColor: 'rgb(122, 60, 13)',
             }}
             size="large"
@@ -277,7 +306,7 @@ const RegisterStudent = () => {
         ]}
       >
         <Form form={form}>
-          <Form.Item>
+          <Form.Item name="avatar" initialValue={userAvatar.avatarURL}>
             <Radio.Group
               onChange={handleAvatarChange}
               style={{
@@ -292,9 +321,9 @@ const RegisterStudent = () => {
                   style={{ height: '100%', margin: '1rem' }}
                   key={avatarIcon.avatarURL}
                   value={avatarIcon.avatarURL}
+                  onClick={() => setUserAvatar(avatarIcon.avatarURL)}
                 >
                   <Avatar
-                    onClick={() => setUserAvatar(avatarIcon.avatarURL)}
                     key={avatarIcon.avatarURL}
                     avatar={{
                       avatarName: avatarIcon.avatarURL,
@@ -305,8 +334,13 @@ const RegisterStudent = () => {
                 </Radio.Button>
               ))}
             </Radio.Group>
-            <LeftCircleFilled />
-            <RightCircleFilled />
+            <Pagination
+              total={pagination.total}
+              pageSize={10}
+              showSizeChanger={false}
+              current={pagination.page}
+              onChange={(page) => getAvatarList(page)}
+            />
           </Form.Item>
         </Form>
       </Modal>

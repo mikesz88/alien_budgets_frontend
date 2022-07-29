@@ -7,7 +7,8 @@ const URL_ADULT = `${BASE_URL}/adults`;
 const URL_AVATAR = `${BASE_URL}/avatars`;
 
 const Endpoints = {
-  urlGetAvatars: URL_AVATAR,
+  getAvatars: URL_AVATAR,
+  getAvatarAdjective: `${URL_AVATAR}/adjective`,
 };
 
 export default Endpoints;
