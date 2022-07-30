@@ -5,6 +5,8 @@ import StyledTitle from '../../../components/Title';
 import StyledButton from '../../../components/PrimaryButton';
 import Avatar from '../../../components/Avatar';
 import { UserContext } from '../../../App';
+import StyledRadioButton from './styles';
+import theme from '../../../theme';
 
 const RegisterStudent = () => {
   const { avatarService } = useContext(UserContext);
@@ -12,6 +14,8 @@ const RegisterStudent = () => {
   const [avatarModal, setAvatarModal] = useState(false);
   const [avatarList, setAvatarList] = useState([]);
   const [userAvatar, setUserAvatar] = useState({});
+  const [userAdjective, setUserAdjective] = useState('');
+  const [userBackgroundColor, setUserBackgroundColor] = useState('');
   const [pagination, setPagination] = useState({
     total: '',
     totalPages: '',
@@ -25,7 +29,6 @@ const RegisterStudent = () => {
     avatarService
       .getAvatarList(page)
       .then((res) => {
-        console.log(res);
         setAvatarList(res.data);
         setPagination({
           total: res.pagination.total,
@@ -43,7 +46,13 @@ const RegisterStudent = () => {
       });
   };
 
+  const generateBgColor = () =>
+    // eslint-disable-next-line no-bitwise
+    `#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`;
+
   useEffect(() => {
+    avatarService.getRandomAdjective().then((res) => setUserAdjective(res));
+    setUserBackgroundColor(generateBgColor());
     getAvatarList();
     avatarService
       .getRandomAvatar()
@@ -70,6 +79,14 @@ const RegisterStudent = () => {
       ...prevState,
       avatarURL: value,
     }));
+  };
+
+  const handleBgColorChange = (value) => {
+    console.log(value);
+    setUserBackgroundColor(value);
+    form.setFieldsValue({
+      avatarColor: value,
+    });
   };
 
   const onFinish = (values) => {
@@ -223,7 +240,7 @@ const RegisterStudent = () => {
             onClick={() => setAvatarUsernameModal(!avatarUsernameModal)}
             type="primary"
           >
-            Choose Avatar & Username
+            Choose Avatar and Username
           </StyledButton>
         </Form.Item>
         {/* Classroom Code */}
@@ -254,41 +271,74 @@ const RegisterStudent = () => {
           </StyledButton>,
         ]}
       >
-        <>
-          <Avatar
-            avatar={{
-              avatarName: userAvatar.avatarURL,
-              avatarColor: 'rgb(122, 60, 13)',
-            }}
-            size="large"
-          />
-          <StyledButton
-            type="primary"
-            onClick={() => setAvatarModal(!avatarModal)}
-          >
-            Choose Avatar
-          </StyledButton>
-          <Form form={form}>
-            <Form.Item
-              name="username"
-              hasFeedback
-              rules={[
-                {
-                  type: 'text',
-                  required: true,
-                  message: 'Please input your username.',
-                },
-                {
-                  pattern: /[a-zA-Z]{3,}/gm,
-                  required: true,
-                  message: 'Must be minimum 3 letters.',
-                },
-              ]}
+        <Form form={form}>
+          <Form.Item noStyle>
+            <Avatar
+              avatar={{
+                avatarName: userAvatar.avatarURL,
+                avatarColor: userBackgroundColor,
+              }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item noStyle>
+            <StyledButton
+              type="primary"
+              onClick={() => setAvatarModal(!avatarModal)}
             >
-              <Input type="text" placeholder="Username" />
+              Choose Avatar
+            </StyledButton>
+          </Form.Item>
+          <Form.Item
+            name="avatarColor"
+            initialValue={userBackgroundColor}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a color!',
+              },
+            ]}
+          >
+            <StyledButton
+              onClick={() => handleBgColorChange(generateBgColor())}
+              type="primary"
+            >
+              {userBackgroundColor}
+            </StyledButton>
+          </Form.Item>
+          <Form.Item
+            name="username"
+            hasFeedback
+            initialValue={`${userAdjective} ${userAvatar.title}`}
+            rules={[
+              {
+                type: 'text',
+                required: true,
+                message: 'Please input your username.',
+              },
+              {
+                pattern: /[a-zA-Z]{3,}/gm,
+                required: true,
+                message: 'Must be minimum 3 letters.',
+              },
+            ]}
+          >
+            <Form.Item noStyle>
+              <StyledButton
+                onClick={() =>
+                  avatarService
+                    .getRandomAdjective()
+                    .then((res) => setUserAdjective(res))
+                }
+                type="primary"
+                placeholder="Username"
+              >
+                Choose Adjective
+              </StyledButton>
+              <span>{`${userAdjective} ${userAvatar.title}`}</span>
             </Form.Item>
-          </Form>
-        </>
+          </Form.Item>
+        </Form>
       </Modal>
       <Modal
         title="Choose Avatar"
@@ -317,31 +367,35 @@ const RegisterStudent = () => {
               }}
             >
               {avatarList.map((avatarIcon) => (
-                <Radio.Button
-                  style={{ height: '100%', margin: '1rem' }}
+                <StyledRadioButton
+                  style={{
+                    height: '100%',
+                    margin: '1rem',
+                  }}
                   key={avatarIcon.avatarURL}
                   value={avatarIcon.avatarURL}
-                  onClick={() => setUserAvatar(avatarIcon.avatarURL)}
+                  onClick={() => setUserAvatar(avatarIcon)}
                 >
                   <Avatar
                     key={avatarIcon.avatarURL}
                     avatar={{
                       avatarName: avatarIcon.avatarURL,
-                      avatarColor: 'rgb(122, 60, 13)',
+                      avatarColor: theme.colors.lightGrey,
                     }}
                     size="large"
                   />
-                </Radio.Button>
+                </StyledRadioButton>
               ))}
             </Radio.Group>
-            <Pagination
-              total={pagination.total}
-              pageSize={10}
-              showSizeChanger={false}
-              current={pagination.page}
-              onChange={(page) => getAvatarList(page)}
-            />
           </Form.Item>
+          <Pagination
+            total={pagination.total}
+            simple
+            pageSize={10}
+            showSizeChanger={false}
+            current={pagination.page}
+            onChange={(page) => getAvatarList(page)}
+          />
         </Form>
       </Modal>
     </>

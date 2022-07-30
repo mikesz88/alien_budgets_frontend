@@ -3,14 +3,6 @@ import axios from 'axios';
 import Endpoints from '../constants/endpoints';
 
 class AvatarService {
-  constructor() {
-    this.avatarList = [];
-  }
-
-  setAvatarList(newAvatarList) {
-    this.avatarList = newAvatarList;
-  }
-
   async getAvatarList(page) {
     const limit = 10;
     const currentPage = page || 1;
@@ -18,7 +10,6 @@ class AvatarService {
       const { data: response } = await axios.get(
         `${Endpoints.getAvatars}?limit=${limit}&page=${currentPage}`
       );
-      this.setAvatarList(response.data);
       return response;
     } catch (error) {
       throw error;
