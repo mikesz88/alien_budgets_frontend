@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 import axios from 'axios';
-import Endpoints from '../constants/endpoints';
+import Endpoints from '../common/endpoints';
 
 class AvatarService {
   async getAvatarList(page) {

@@ -9,6 +9,7 @@ const URL_AVATAR = `${BASE_URL}/avatars`;
 const Endpoints = {
   getAvatars: URL_AVATAR,
   getAvatarAdjective: `${URL_AVATAR}/adjective`,
+  getAllClassCodes: `${URL_ADULT}/classcodelist`,
 };
 
 export default Endpoints;

@@ -15,12 +15,17 @@ import Student from './features/Student';
 import Adult from './features/Adult';
 import AdultLogin from './features/Adult/Login';
 import StudentLogin from './features/Student/Login';
-import RegisterStudent from './features/Student/Register';
 import RegisterAdult from './features/Adult/Register';
 import GuestUser from './features/GuestUser';
 import AvatarService from './services/avatarService';
+import StudentService from './services/studentService';
+import ClassCodeService from './services/classCodeService';
+import RegisterStudentPart2 from './features/Student/RegisterPart2';
+import RegisterStudentPart1 from './features/Student/RegisterPart1';
 
 const avatarService = new AvatarService();
+const studentService = new StudentService();
+const classCodeService = new ClassCodeService();
 export const UserContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -28,6 +33,8 @@ const AuthProvider = ({ children }) => {
     // authService,
     // bookService,
     avatarService,
+    studentService,
+    classCodeService,
     updateService: () => setContextServices({ ...contextServices }),
   };
 
@@ -60,7 +67,16 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Hero />} exact />
           <Route path="/login/student" element={<StudentLogin />} exact />
-          <Route path="/register/student" element={<RegisterStudent />} exact />
+          <Route
+            path="/register/student/part1"
+            element={<RegisterStudentPart1 />}
+            exact
+          />
+          <Route
+            path="/register/student/part2"
+            element={<RegisterStudentPart2 />}
+            exact
+          />
           <Route path="/register/adult" element={<RegisterAdult />} exact />
           <Route path="/login/adult" element={<AdultLogin />} exact />
           <Route path="/guestUser" element={<GuestUser />} exact />
