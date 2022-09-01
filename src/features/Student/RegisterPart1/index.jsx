@@ -148,12 +148,7 @@ const RegisterStudentPart1 = () => {
         </Form.Item>
         <Form.Item register="true" style={{ textAlign: 'center' }}>
           <div>By signing up you agree to our terms and policies.</div>
-          <StyledButton
-            larger="true"
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
+          <StyledButton larger="true" type="primary" htmlType="submit">
             Next Page
           </StyledButton>
           <div>

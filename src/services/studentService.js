@@ -11,9 +11,8 @@ class StudentService {
     this.forgotPasswordAnswer = '';
     this.classCode = '';
     this.username = '';
-    this.avatar = '';
+    this.avatarURL = '';
     this.avatarBackground = '';
-    this.avatarAdjective = '';
     this.isLoggedIn = false;
   }
 
@@ -25,12 +24,21 @@ class StudentService {
       forgotPasswordAnswer,
       classCode,
     } = userData;
-
+    console.log(userData);
     this.firstName = firstName;
     this.lastInitial = lastInitial;
     this.forgotPasswordQuestion = forgotPasswordQuestion;
     this.forgotPasswordAnswer = forgotPasswordAnswer;
     this.classCode = classCode;
+  }
+
+  registerUserPart2(userData) {
+    // const {
+    //   username,
+    //   avatarURL,
+    //   avatarBackground,
+    //   password
+    // } = userData;
   }
 
   setIsLoggedIn(loggedIn) {

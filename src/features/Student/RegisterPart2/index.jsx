@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useContext, useEffect } from 'react';
-import { Form, Input, Pagination, Radio } from 'antd';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
+import { Form, Input, Pagination, Radio, Modal } from 'antd';
+import { faker } from '@faker-js/faker';
 import { UserContext } from '../../../App';
 import Avatar from '../../../components/Avatar';
 import StyledRadioButton from './styles';
@@ -14,6 +15,8 @@ const RegisterStudentPart2 = () => {
   const [userAvatar, setUserAvatar] = useState({});
   const [userAdjective, setUserAdjective] = useState('');
   const [userBackgroundColor, setUserBackgroundColor] = useState('');
+  const [openAvatarModal, setOpenAvatarModal] = useState(false);
+  const [userNumbers, setUserNumbers] = useState();
   const [pagination, setPagination] = useState({
     total: '',
     totalPages: '',
@@ -22,6 +25,11 @@ const RegisterStudentPart2 = () => {
     nextPage: '',
   });
   const [form] = Form.useForm();
+
+  // console.log(form.getFieldsValue(form));
+
+  const openModal = () => setOpenAvatarModal(true);
+  const closeModal = () => setOpenAvatarModal(false);
 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-#$^+_!*()@%&]).{8,20}$/gm;
@@ -66,21 +74,24 @@ const RegisterStudentPart2 = () => {
     // eslint-disable-next-line no-bitwise
     `#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`;
 
-  useEffect(() => {
-    setUserBackgroundColor(generateBgColor());
-    getRandomAdjective();
-    getAvatarList();
-    getRandomAvatar();
-  }, []);
+  const selectUsernameNumbers = () => {
+    const length =
+      userAdjective && userAvatar.title
+        ? userAdjective.length + userAvatar.title.length
+        : 5;
+    const numbers =
+      length < 5 ? faker.random.numeric(8 - length) : faker.random.numeric(3);
+    if (numbers === 666) {
+      selectUsernameNumbers();
+    } else {
+      setUserNumbers(numbers);
+    }
+  };
 
-  const handleAvatarChange = ({ target: { value } }) => {
+  const handleUsername = (value) => {
     form.setFieldsValue({
-      avatar: value,
+      username: value,
     });
-    setUserAvatar((prevState) => ({
-      ...prevState,
-      avatarURL: value,
-    }));
   };
 
   const handleBgColorChange = (value) => {
@@ -90,177 +101,250 @@ const RegisterStudentPart2 = () => {
     });
   };
 
+  const handleAvatarURL = () => {
+    form.setFieldsValue({
+      avatarURL: userAvatar.avatarURL,
+    });
+  };
+
+  const username = useMemo(
+    () => `${userAdjective}_${userAvatar.title}${userNumbers}`,
+    [userAdjective, userAvatar.title, userNumbers]
+  );
+
+  const initialBackgroundColor = () => handleBgColorChange(generateBgColor());
+  const initialUsername = () => handleUsername(username);
+  const initialAvatarURL = () => handleAvatarURL();
+
+  useEffect(() => {
+    initialBackgroundColor();
+    getAvatarList();
+    getRandomAdjective();
+    getRandomAvatar();
+    selectUsernameNumbers();
+  }, []);
+
+  useEffect(
+    () => initialUsername(),
+    [userAdjective, userAvatar.title, userNumbers]
+  );
+
+  const handleAvatarChange = ({ target: { value } }) => {
+    form.setFieldsValue({
+      avatarURL: value.avatarURL,
+    });
+    setUserAvatar(value);
+  };
+
+  useEffect(() => {
+    initialAvatarURL();
+  }, [userAvatar]);
+
+  const onFinish = (values) => console.log(values);
+
   return (
     <>
       <StyledTitle>NEW ALIEN</StyledTitle>
-      <Form.Item noStyle>
-        <Avatar
-          avatar={{
-            avatarName: userAvatar.avatarURL,
-            avatarColor: userBackgroundColor,
+      <Form form={form} id={form} onFinish={onFinish}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
-          size="large"
-        />
-      </Form.Item>
-      <Form.Item
-        name="avatarColor"
-        initialValue={userBackgroundColor}
-        rules={[
-          {
-            required: true,
-            message: 'Please select a color!',
-          },
-        ]}
-      >
-        <StyledButton
-          onClick={() => handleBgColorChange(generateBgColor())}
-          type="primary"
         >
-          {userBackgroundColor}
-        </StyledButton>
-      </Form.Item>
-      <Form.Item
-        name="username"
-        hasFeedback
-        initialValue={`${userAdjective} ${userAvatar.title}`}
-        rules={[
-          {
-            type: 'text',
-            required: true,
-            message: 'Please input your username.',
-          },
-          {
-            pattern: /[a-zA-Z]{3,}/gm,
-            required: true,
-            message: 'Must be minimum 3 letters.',
-          },
-        ]}
-      >
-        <Form.Item noStyle>
-          <StyledButton
-            onClick={getRandomAdjective}
-            type="primary"
-            placeholder="Username"
+          <Form.Item noStyle>
+            <StyledButton
+              onClick={openModal}
+              type="primary"
+              placeholder="Select Avatar"
+            >
+              Choose Avatar
+            </StyledButton>
+          </Form.Item>
+          <Form.Item
+            name="avatarColor"
+            rules={[
+              {
+                required: true,
+                message: 'Please select a color!',
+              },
+            ]}
           >
-            Choose Adjective
-          </StyledButton>
-          <span>{`${userAdjective} ${userAvatar.title}`}</span>
-        </Form.Item>
-      </Form.Item>
-      <Form.Item noStyle>
-        <div>
-          Password must be 8-20 characters, including: at least one capital
-          letter, at least one small letter, one number and one special
-          character - ! @ # $ % ^ & * ( ) _ +
+            <StyledButton
+              onClick={() => handleBgColorChange(generateBgColor())}
+              type="primary"
+            >
+              Choose Random Background Color
+            </StyledButton>
+          </Form.Item>
+          <Form.Item noStyle>
+            <Avatar
+              avatar={{
+                avatarName: userAvatar.avatarURL,
+                avatarColor: userBackgroundColor,
+              }}
+              size="large"
+            />
+          </Form.Item>
         </div>
         <Form.Item
-          name="password"
+          name="username"
+          rules={[
+            {
+              type: 'text',
+              required: true,
+              message: 'Please input your username.',
+            },
+            {
+              pattern: /[a-zA-Z]{3,}/gm,
+              required: true,
+              message: 'Must be minimum 3 letters.',
+            },
+          ]}
+        >
+          <Form.Item noStyle>
+            <StyledButton
+              onClick={getRandomAdjective}
+              type="primary"
+              placeholder="Username"
+            >
+              Choose Adjective
+            </StyledButton>
+            <StyledButton
+              onClick={selectUsernameNumbers}
+              type="primary"
+              placeholder="Username"
+            >
+              Choose Random Numbers
+            </StyledButton>
+            <span>{username}</span>
+          </Form.Item>
+        </Form.Item>
+        <Form.Item noStyle>
+          <div>
+            Password must be 8-20 characters, including: at least one capital
+            letter, at least one small letter, one number and one special
+            character - ! @ # $ % ^ & * ( ) _ +
+          </div>
+          <Form.Item
+            name="password"
+            hasFeedback
+            register="true"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your Password!',
+              },
+              {
+                min: 8,
+                required: true,
+                message: 'Must be a minimum of 8 characters',
+              },
+              {
+                max: 20,
+                required: true,
+                message: 'Must be a maximum of 20 characters',
+              },
+              {
+                pattern: passwordRegex,
+                required: true,
+                message:
+                  'Password must be 8-20 characters, including: at least one capital letter, at least one small letter, one number and one special character - ! @ # $ % ^ & * ( ) _ +',
+              },
+            ]}
+          >
+            <Input.Password type="password" placeholder="Password" />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item
+          name="confirm"
+          dependencies={['password']}
           hasFeedback
           register="true"
           rules={[
             {
               required: true,
-              message: 'Please input your Password!',
+              message: 'Please confirm your password!',
             },
-            {
-              min: 8,
-              required: true,
-              message: 'Must be a minimum of 8 characters',
-            },
-            {
-              max: 20,
-              required: true,
-              message: 'Must be a maximum of 20 characters',
-            },
-            {
-              pattern: passwordRegex,
-              required: true,
-              message:
-                'Password must be 8-20 characters, including: at least one capital letter, at least one small letter, one number and one special character - ! @ # $ % ^ & * ( ) _ +',
-            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('The two passwords that you entered do not match!')
+                );
+              },
+            }),
           ]}
         >
-          <Input.Password type="password" placeholder="Password" />
+          <Input.Password type="password" placeholder="Confirm Password" />
         </Form.Item>
-      </Form.Item>
-      <Form.Item
-        name="confirm"
-        dependencies={['password']}
-        hasFeedback
-        register="true"
-        rules={[
-          {
-            required: true,
-            message: 'Please confirm your password!',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(
-                new Error('The two passwords that you entered do not match!')
-              );
-            },
-          }),
-        ]}
-      >
-        <Input.Password type="password" placeholder="Confirm Password" />
-      </Form.Item>
-      <Form.Item name="avatar" initialValue={userAvatar.avatarURL}>
-        <Radio.Group
-          onChange={handleAvatarChange}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          {avatarList.map((avatarIcon) => (
-            <StyledRadioButton
-              style={{
-                height: '100%',
-                margin: '1rem',
-              }}
-              key={avatarIcon.avatarURL}
-              value={avatarIcon.avatarURL}
-              onClick={() => setUserAvatar(avatarIcon)}
+        <Form.Item register="true" style={{ textAlign: 'center' }}>
+          <div>By signing up you agree to our terms and policies.</div>
+          <StyledButton larger="true" type="primary" htmlType="submit">
+            Register
+          </StyledButton>
+        </Form.Item>
+        <Form.Item name="avatarURL">
+          <Form.Item noStyle>
+            <Modal
+              visible={openAvatarModal}
+              width={1000}
+              closable
+              destroyOnClose
+              onCancel={closeModal}
+              footer={null}
             >
-              <Avatar
-                key={avatarIcon.avatarURL}
-                avatar={{
-                  avatarName: avatarIcon.avatarURL,
-                  avatarColor: theme.colors.lightGrey,
+              <Radio.Group
+                onChange={handleAvatarChange}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
                 }}
-                size="large"
+              >
+                {avatarList.map((avatarIcon) => (
+                  <StyledRadioButton
+                    style={{
+                      height: '100%',
+                      margin: '1rem',
+                    }}
+                    key={avatarIcon.avatarURL}
+                    value={avatarIcon}
+                    onClick={() => setUserAvatar(avatarIcon)}
+                  >
+                    <Avatar
+                      key={avatarIcon.avatarURL}
+                      avatar={{
+                        avatarName: avatarIcon.avatarURL,
+                        avatarColor: theme.colors.lightGrey,
+                      }}
+                      size="large"
+                    />
+                  </StyledRadioButton>
+                ))}
+              </Radio.Group>
+              <Pagination
+                total={pagination.total}
+                simple
+                pageSize={10}
+                showSizeChanger={false}
+                current={pagination.page}
+                onChange={(page) => getAvatarList(page)}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
               />
-            </StyledRadioButton>
-          ))}
-        </Radio.Group>
-      </Form.Item>
-      <Pagination
-        total={pagination.total}
-        simple
-        pageSize={10}
-        showSizeChanger={false}
-        current={pagination.page}
-        onChange={(page) => getAvatarList(page)}
-      />
-      <Form.Item register="true" style={{ textAlign: 'center' }}>
-        <div>By signing up you agree to our terms and policies.</div>
-        <StyledButton
-          larger="true"
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
-          Register
-        </StyledButton>
-        <div>
-          The next page you will out your username, password, and avatar.
-        </div>
-      </Form.Item>
+            </Modal>
+          </Form.Item>
+        </Form.Item>
+      </Form>
     </>
   );
 };
