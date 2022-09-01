@@ -6,6 +6,7 @@ import Avatar from '../../../components/Avatar';
 import StyledRadioButton from './styles';
 import StyledButton from '../../../components/PrimaryButton';
 import theme from '../../../theme';
+import StyledTitle from '../../../components/Title';
 
 const RegisterStudentPart2 = () => {
   const { avatarService } = useContext(UserContext);
@@ -46,14 +47,10 @@ const RegisterStudentPart2 = () => {
       });
   };
 
-  const generateBgColor = () =>
-    // eslint-disable-next-line no-bitwise
-    `#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`;
-
-  useEffect(() => {
+  const getRandomAdjective = () =>
     avatarService.getRandomAdjective().then((res) => setUserAdjective(res));
-    setUserBackgroundColor(generateBgColor());
-    getAvatarList();
+
+  const getRandomAvatar = () => {
     avatarService
       .getRandomAvatar()
       .then((res) => {
@@ -63,6 +60,17 @@ const RegisterStudentPart2 = () => {
         setUserAvatar(error);
         throw error;
       });
+  };
+
+  const generateBgColor = () =>
+    // eslint-disable-next-line no-bitwise
+    `#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`;
+
+  useEffect(() => {
+    setUserBackgroundColor(generateBgColor());
+    getRandomAdjective();
+    getAvatarList();
+    getRandomAvatar();
   }, []);
 
   const handleAvatarChange = ({ target: { value } }) => {
@@ -76,7 +84,6 @@ const RegisterStudentPart2 = () => {
   };
 
   const handleBgColorChange = (value) => {
-    console.log(value);
     setUserBackgroundColor(value);
     form.setFieldsValue({
       avatarColor: value,
@@ -85,6 +92,61 @@ const RegisterStudentPart2 = () => {
 
   return (
     <>
+      <StyledTitle>NEW ALIEN</StyledTitle>
+      <Form.Item noStyle>
+        <Avatar
+          avatar={{
+            avatarName: userAvatar.avatarURL,
+            avatarColor: userBackgroundColor,
+          }}
+          size="large"
+        />
+      </Form.Item>
+      <Form.Item
+        name="avatarColor"
+        initialValue={userBackgroundColor}
+        rules={[
+          {
+            required: true,
+            message: 'Please select a color!',
+          },
+        ]}
+      >
+        <StyledButton
+          onClick={() => handleBgColorChange(generateBgColor())}
+          type="primary"
+        >
+          {userBackgroundColor}
+        </StyledButton>
+      </Form.Item>
+      <Form.Item
+        name="username"
+        hasFeedback
+        initialValue={`${userAdjective} ${userAvatar.title}`}
+        rules={[
+          {
+            type: 'text',
+            required: true,
+            message: 'Please input your username.',
+          },
+          {
+            pattern: /[a-zA-Z]{3,}/gm,
+            required: true,
+            message: 'Must be minimum 3 letters.',
+          },
+        ]}
+      >
+        <Form.Item noStyle>
+          <StyledButton
+            onClick={getRandomAdjective}
+            type="primary"
+            placeholder="Username"
+          >
+            Choose Adjective
+          </StyledButton>
+          <span>{`${userAdjective} ${userAvatar.title}`}</span>
+        </Form.Item>
+      </Form.Item>
       <Form.Item noStyle>
         <div>
           Password must be 8-20 characters, including: at least one capital
@@ -145,64 +207,6 @@ const RegisterStudentPart2 = () => {
       >
         <Input.Password type="password" placeholder="Confirm Password" />
       </Form.Item>
-      <Form.Item noStyle>
-        <Avatar
-          avatar={{
-            avatarName: userAvatar.avatarURL,
-            avatarColor: userBackgroundColor,
-          }}
-          size="large"
-        />
-      </Form.Item>
-      <Form.Item
-        name="avatarColor"
-        initialValue={userBackgroundColor}
-        rules={[
-          {
-            required: true,
-            message: 'Please select a color!',
-          },
-        ]}
-      >
-        <StyledButton
-          onClick={() => handleBgColorChange(generateBgColor())}
-          type="primary"
-        >
-          {userBackgroundColor}
-        </StyledButton>
-      </Form.Item>
-      <Form.Item
-        name="username"
-        hasFeedback
-        initialValue={`${userAdjective} ${userAvatar.title}`}
-        rules={[
-          {
-            type: 'text',
-            required: true,
-            message: 'Please input your username.',
-          },
-          {
-            pattern: /[a-zA-Z]{3,}/gm,
-            required: true,
-            message: 'Must be minimum 3 letters.',
-          },
-        ]}
-      >
-        <Form.Item noStyle>
-          <StyledButton
-            onClick={() =>
-              avatarService
-                .getRandomAdjective()
-                .then((res) => setUserAdjective(res))
-            }
-            type="primary"
-            placeholder="Username"
-          >
-            Choose Adjective
-          </StyledButton>
-          <span>{`${userAdjective} ${userAvatar.title}`}</span>
-        </Form.Item>
-      </Form.Item>
       <Form.Item name="avatar" initialValue={userAvatar.avatarURL}>
         <Radio.Group
           onChange={handleAvatarChange}
@@ -243,6 +247,20 @@ const RegisterStudentPart2 = () => {
         current={pagination.page}
         onChange={(page) => getAvatarList(page)}
       />
+      <Form.Item register="true" style={{ textAlign: 'center' }}>
+        <div>By signing up you agree to our terms and policies.</div>
+        <StyledButton
+          larger="true"
+          type="primary"
+          htmlType="submit"
+          className="login-form-button"
+        >
+          Register
+        </StyledButton>
+        <div>
+          The next page you will out your username, password, and avatar.
+        </div>
+      </Form.Item>
     </>
   );
 };

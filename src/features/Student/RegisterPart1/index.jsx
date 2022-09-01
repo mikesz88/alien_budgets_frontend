@@ -1,18 +1,34 @@
 /* eslint-disable import/no-cycle */
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { Form, Input, notification, Select } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import StyledTitle from '../../../components/Title';
 import StyledButton from '../../../components/PrimaryButton';
 import { UserContext } from '../../../App';
 
 const RegisterStudentPart1 = () => {
-  const { studentService, classCodeService } = useContext(UserContext);
+  const [questionList, setQuestionList] = useState([]);
+  const { authService, studentService, classCodeService } =
+    useContext(UserContext);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
-  const getAllClassCodes = () => classCodeService.getAllClassCodes();
+  const getAllClassCodes = useCallback(
+    () => classCodeService.getAllClassCodes(),
+    []
+  );
+
+  const getAllForgotQuestions = useCallback(
+    () =>
+      authService
+        .getAllForgotQuestions()
+        .then(() => setQuestionList(authService.forgotQuestionList)),
+    []
+  );
 
   useEffect(() => {
     getAllClassCodes();
+    getAllForgotQuestions();
   }, []);
 
   const forgotPassQuestionChange = (value) => {
@@ -24,10 +40,13 @@ const RegisterStudentPart1 = () => {
   const completeStudentData = (userData) => {
     studentService.registerUserPart1(userData);
     form.resetFields();
+    navigate('/register/student/part2');
   };
 
-  const isValidClassCode = (classCode) =>
-    classCodeService.classCodeList.includes(classCode);
+  const isValidClassCode = useCallback(
+    (classCode) => classCodeService.classCodeList.includes(classCode),
+    []
+  );
 
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
@@ -97,15 +116,11 @@ const RegisterStudentPart1 = () => {
             onChange={forgotPassQuestionChange}
             allowClear
           >
-            <Select.Option key="test1" value="test1">
-              Test1
-            </Select.Option>
-            <Select.Option key="test2" value="test2">
-              Test2
-            </Select.Option>
-            <Select.Option key="test3" value="test3">
-              Test3
-            </Select.Option>
+            {questionList.map((question) => (
+              <Select.Option key={question.id} value={question.id}>
+                {question.question}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item
@@ -139,7 +154,7 @@ const RegisterStudentPart1 = () => {
             htmlType="submit"
             className="login-form-button"
           >
-            Register
+            Next Page
           </StyledButton>
           <div>
             The next page you will out your username, password, and avatar.

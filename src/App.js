@@ -20,17 +20,19 @@ import GuestUser from './features/GuestUser';
 import AvatarService from './services/avatarService';
 import StudentService from './services/studentService';
 import ClassCodeService from './services/classCodeService';
+import AuthService from './services/authService';
 import RegisterStudentPart2 from './features/Student/RegisterPart2';
 import RegisterStudentPart1 from './features/Student/RegisterPart1';
 
 const avatarService = new AvatarService();
 const studentService = new StudentService();
 const classCodeService = new ClassCodeService();
+const authService = new AuthService();
 export const UserContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const context = {
-    // authService,
+    authService,
     // bookService,
     avatarService,
     studentService,

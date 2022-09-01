@@ -5,11 +5,14 @@ const URL_AUTH = `${BASE_URL}/auth`;
 const URL_STUDENT = `${BASE_URL}/students`;
 const URL_ADULT = `${BASE_URL}/adults`;
 const URL_AVATAR = `${BASE_URL}/avatars`;
+const URL_FORGOT_QUESTION = `${BASE_URL}/forgotquestions`;
 
 const Endpoints = {
   getAvatars: URL_AVATAR,
   getAvatarAdjective: `${URL_AVATAR}/adjective`,
   getAllClassCodes: `${URL_ADULT}/classcodelist`,
+  getAllForgotQuestions: URL_FORGOT_QUESTION,
+  getOneForgotQuestion: `${URL_FORGOT_QUESTION}/:id`,
 };
 
 export default Endpoints;
