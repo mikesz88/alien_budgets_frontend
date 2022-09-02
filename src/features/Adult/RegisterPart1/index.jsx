@@ -1,4 +1,4 @@
-/* eslint-disable import/no-cycle */
+/* eslint-disable no-unused-vars */ /* eslint-disable import/no-cycle */
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { Form, Input, notification, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -6,11 +6,14 @@ import StyledTitle from '../../../components/Title';
 import StyledButton from '../../../components/PrimaryButton';
 import { UserContext } from '../../../App';
 
-const RegisterStudentPart1 = () => {
+const RegisterAdult = () => {
   const [questionList, setQuestionList] = useState([]);
   const { authService, classCodeService } = useContext(UserContext);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-#$^+_!*()@%&]).{8,20}$/gm;
 
   const getAllClassCodes = useCallback(
     () => classCodeService.getAllClassCodes(),
@@ -34,31 +37,16 @@ const RegisterStudentPart1 = () => {
     });
   };
 
-  const completeStudentData = (userData) => {
+  const onFinish = (values) => {
+    console.log(values);
     try {
-      authService.registerStudentPart1(userData);
+      authService.registerAdultPart1(values);
       form.resetFields();
-      navigate('/register/student/part2');
+      navigate('/register/adult/part2');
     } catch (error) {
       notification.error({
         message: 'error',
-        description: 'You made a mistake test2',
-      });
-    }
-  };
-
-  const isValidClassCode = useCallback(
-    (classCode) => classCodeService.classCodeList.includes(classCode),
-    []
-  );
-
-  const onFinish = (values) => {
-    if (isValidClassCode(values.classroomCode)) {
-      completeStudentData(values);
-    } else {
-      notification.error({
-        message: 'error',
-        description: 'You made a mistake',
+        description: 'You made a mistake test1',
       });
     }
   };
@@ -66,7 +54,7 @@ const RegisterStudentPart1 = () => {
   return (
     <>
       <StyledTitle>NEW ALIEN</StyledTitle>
-      <Form form={form} name="registerStudent" onFinish={onFinish}>
+      <Form form={form} name="registerAdult" onFinish={onFinish}>
         <Form.Item
           name="firstName"
           hasFeedback
@@ -86,22 +74,94 @@ const RegisterStudentPart1 = () => {
           <Input type="text" placeholder="First Name" />
         </Form.Item>
         <Form.Item
-          name="lastInitial"
+          name="lastName"
           hasFeedback
           rules={[
             {
               type: 'text',
               required: true,
-              message: 'Please input your last initial.',
+              message: 'Please input your last name.',
             },
             {
-              pattern: /^[a-zA-Z]{1}$/gm,
+              pattern: /.{3,}$/gm,
               required: true,
-              message: 'Please only write one letter.',
+              message: 'Pleas write at least three letters.',
             },
           ]}
         >
-          <Input type="text" placeholder="Last Initial" />
+          <Input type="text" placeholder="Last Name" />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          register="true"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Email!',
+            },
+          ]}
+        >
+          <Input type="email" placeholder="Email" />
+        </Form.Item>
+        <Form.Item noStyle>
+          <div>
+            Password must be 8-20 characters, including: at least one capital
+            letter, at least one small letter, one number and one special
+            character - ! @ # $ % ^ & * ( ) _ +
+          </div>
+          <Form.Item
+            name="password"
+            hasFeedback
+            register="true"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your Password!',
+              },
+              {
+                min: 8,
+                required: true,
+                message: 'Must be a minimum of 8 characters',
+              },
+              {
+                max: 20,
+                required: true,
+                message: 'Must be a maximum of 20 characters',
+              },
+              {
+                pattern: passwordRegex,
+                required: true,
+                message:
+                  'Password must be 8-20 characters, including: at least one capital letter, at least one small letter, one number and one special character - ! @ # $ % ^ & * ( ) _ +',
+              },
+            ]}
+          >
+            <Input.Password type="password" placeholder="Password" />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item
+          name="confirm"
+          dependencies={['password']}
+          hasFeedback
+          register="true"
+          rules={[
+            {
+              required: true,
+              message: 'Please confirm your password!',
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('The two passwords that you entered do not match!')
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password type="password" placeholder="Confirm Password" />
         </Form.Item>
         <Form.Item
           name="forgotPasswordQuestion"
@@ -137,17 +197,6 @@ const RegisterStudentPart1 = () => {
         >
           <Input type="text" placeholder="Forgot Password Answer" />
         </Form.Item>
-        <Form.Item
-          name="classroomCode"
-          rules={[
-            {
-              required: true,
-              message: 'Please write in a valid Class Code.',
-            },
-          ]}
-        >
-          <Input type="text" placeholder="Type your class code in now" />
-        </Form.Item>
         <Form.Item register="true" style={{ textAlign: 'center' }}>
           <div>By signing up you agree to our terms and policies.</div>
           <StyledButton larger="true" type="primary" htmlType="submit">
@@ -162,4 +211,4 @@ const RegisterStudentPart1 = () => {
   );
 };
 
-export default RegisterStudentPart1;
+export default RegisterAdult;

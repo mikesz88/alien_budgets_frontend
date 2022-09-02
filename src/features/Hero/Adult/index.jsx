@@ -9,7 +9,7 @@ const Adult = ({ chooseStudent, intro }) => (
   <HeroDivContainer>
     <StyledTitle>Alien Budgets</StyledTitle>
     <StyledLink to="/login/adult">Returning Adult?</StyledLink>
-    <StyledLink to="/register/adult">New Adult?</StyledLink>
+    <StyledLink to="/register/adult/part1">New Adult?</StyledLink>
     <HeroButtonWrapper>
       <StyledButton type="primary" onClick={chooseStudent}>
         Student

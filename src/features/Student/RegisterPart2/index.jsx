@@ -1,7 +1,8 @@
 /* eslint-disable import/no-cycle */
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import { Form, Input, Pagination, Radio, Modal } from 'antd';
+import { Form, Input, Pagination, Radio, Modal, notification } from 'antd';
 import { faker } from '@faker-js/faker';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../App';
 import Avatar from '../../../components/Avatar';
 import StyledRadioButton from './styles';
@@ -10,7 +11,7 @@ import theme from '../../../theme';
 import StyledTitle from '../../../components/Title';
 
 const RegisterStudentPart2 = () => {
-  const { avatarService } = useContext(UserContext);
+  const { avatarService, authService } = useContext(UserContext);
   const [avatarList, setAvatarList] = useState([]);
   const [userAvatar, setUserAvatar] = useState({});
   const [userAdjective, setUserAdjective] = useState('');
@@ -25,8 +26,7 @@ const RegisterStudentPart2 = () => {
     nextPage: '',
   });
   const [form] = Form.useForm();
-
-  // console.log(form.getFieldsValue(form));
+  const navigate = useNavigate();
 
   const openModal = () => setOpenAvatarModal(true);
   const closeModal = () => setOpenAvatarModal(false);
@@ -140,7 +140,24 @@ const RegisterStudentPart2 = () => {
     initialAvatarURL();
   }, [userAvatar]);
 
-  const onFinish = (values) => console.log(values);
+  const onFinish = (values) => {
+    authService
+      .registerStudent(values)
+      .then(() => {
+        navigate('/student');
+        notification.success({
+          message: 'Sign Up Successful',
+          description: 'You are now currently logged in.',
+        });
+        form.resetFields();
+      })
+      .catch(() => {
+        notification.error({
+          message: 'error',
+          description: 'You made a mistake',
+        });
+      });
+  };
 
   return (
     <>

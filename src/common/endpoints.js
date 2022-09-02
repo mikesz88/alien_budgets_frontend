@@ -13,6 +13,8 @@ const Endpoints = {
   getAllClassCodes: `${URL_ADULT}/classcodelist`,
   getAllForgotQuestions: URL_FORGOT_QUESTION,
   getOneForgotQuestion: `${URL_FORGOT_QUESTION}/:id`,
+  registerStudent: `${URL_AUTH}/register/student`,
+  getLoggedInUser: `${URL_AUTH}/me`,
 };
 
 export default Endpoints;
