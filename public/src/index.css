@@ -1,0 +1,24 @@
+@import '~antd/dist/antd.css';
+
+body {
+  margin: 0;
+  font-family: 'Hind', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@media (max-width: 1023px) {
+  .ant-table-tbody > tr > td {
+    padding: 10px;
+  }
+
+  .ant-table-thead > tr > th {
+    padding: 10px;
+  }
+}
