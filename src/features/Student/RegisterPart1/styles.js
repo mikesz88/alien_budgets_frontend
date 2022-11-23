@@ -29,4 +29,6 @@ export const StyledBasicFormItem = styled(Form.Item)`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 300px;
+  margin: 0 auto 1rem;
 `;
