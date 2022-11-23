@@ -21,6 +21,7 @@ import {
   StyledFormItem,
   Styled500Div,
 } from './styles';
+import Routes from '../../../common/routes';
 
 const RegisterAdult = () => {
   const [questionList, setQuestionList] = useState([]);
@@ -53,7 +54,7 @@ const RegisterAdult = () => {
       registerAdultPart1(values);
       form.resetFields();
       Notification(success, SUCCESS, 'Part 1 Completed!');
-      navigate('/register/adult/part2');
+      navigate(Routes.registerAdultPart2);
     } catch (err) {
       Notification(error, ERROR, 'You made a mistake. Please try again!');
     }
@@ -260,7 +261,7 @@ const RegisterAdult = () => {
             The next page you will out your username, password, and avatar.
           </StyledBasicDiv>
           <StyledButton larger="true" type="primary">
-            <Link to="/">Back to Main Page</Link>
+            <Link to={Routes.hero}>Back to Main Page</Link>
           </StyledButton>
         </StyledCenteredFormItem>
       </Form>

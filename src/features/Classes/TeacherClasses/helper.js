@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Routes from '../../../common/routes';
 import StyledButton from '../../../components/PrimaryButton';
 
 const columns = [
@@ -30,7 +31,7 @@ const columns = [
     key: 'viewClass',
     render: (text) => (
       <StyledButton type="primary">
-        <Link to={`/classrooms/teacher/details/${text}`}>Details</Link>
+        <Link to={`${Routes.classDetails}${text}`}>Details</Link>
       </StyledButton>
     ),
     width: '25%',

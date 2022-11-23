@@ -1,26 +1,28 @@
+import Routes from '../../../common/routes';
+
 const dashboardIcons = [
   {
     title: 'My Stats',
     type: 'primary',
-    link: '/stats/', // :user
+    link: Routes.stats,
     linkId: true,
   },
   {
     title: 'Class Leaderboard',
     type: 'default',
-    link: '/classrooms/leaderboard/', // :class
+    link: Routes.leaderboard,
     linkId: true,
   },
   {
     title: 'Account',
     type: 'default',
-    link: '/account',
+    link: Routes.account,
     linkId: false,
   },
   {
     title: 'Logout',
     type: 'primary',
-    link: '/logout',
+    link: Routes.logout,
     linkId: false,
   },
 ];

@@ -14,13 +14,18 @@ import {
 import Notification from '../../../components/Notification';
 import StyledBasicDiv from '../../../components/BasicDiv';
 import {
+  StyledButtonContainer,
+  StyledDivContainer,
+  StyledDivInput,
   StyledDivWrapper,
   StyledExtraTitle,
+  StyledForm,
   StyledFormItem,
   StyledWidthFormItem,
 } from './styles';
 import { useAuthServiceProvider } from '../../../services/AuthServiceProvider';
 import AlienImages from '../../../components/AlienImages';
+import Routes from '../../../common/routes';
 
 const { confirm } = Modal;
 
@@ -67,7 +72,7 @@ const AccessByForgotPassword = () => {
       icon: <ExclamationCircleOutlined />,
       content: 'Are you sure you want to reset?',
       onOk() {
-        setResetModal(true);
+        setResetModal(false);
         form.resetFields();
       },
       onCancel() {},
@@ -77,7 +82,7 @@ const AccessByForgotPassword = () => {
   const closeModals = () => {
     setResetModal(false);
     setSuccessResult(false);
-    return email ? navigate('/login/adult') : navigate('/login/student');
+    return email ? navigate(Routes.adultLogin) : navigate(Routes.studentLogin);
   };
 
   const validateForgotPassword = (forgotPasswordAnswer) => {
@@ -128,7 +133,12 @@ const AccessByForgotPassword = () => {
   };
 
   const forgotPasswordForm = (
-    <Form layout="vertical" name="Forgot Login" onFinish={onFinish} form={form}>
+    <StyledForm
+      layout="vertical"
+      name="Forgot Login"
+      onFinish={onFinish}
+      form={form}
+    >
       <StyledBasicDiv>{forgotQuestion}</StyledBasicDiv>
       <Form.Item
         name="forgotPasswordAnswer"
@@ -146,18 +156,18 @@ const AccessByForgotPassword = () => {
           Submit
         </StyledButton>
       </StyledFormItem>
-    </Form>
+    </StyledForm>
   );
 
   return (
-    <>
+    <StyledDivContainer>
       <AlienImages />
       <GreetingBar template="Forgot Question" />
       <StyledDivWrapper>
         <StyledExtraTitle>
           Choose Email (Adult) or Username (Student/Alien)
         </StyledExtraTitle>
-        <StyledBasicDiv>
+        <StyledButtonContainer>
           <StyledButton
             type="primary"
             size="large"
@@ -172,32 +182,31 @@ const AccessByForgotPassword = () => {
           >
             Username
           </StyledButton>
-        </StyledBasicDiv>
+        </StyledButtonContainer>
         {emailOrUsername === 'email' ? (
-          <StyledBasicDiv>
+          <StyledDivInput>
             <Input
               type="email"
               onChange={handleEmail}
-              placeholder="write your email"
+              placeholder="Write your email"
             />
             <StyledButton type="primary" size="large" onClick={handleQuestion}>
               Find Question
             </StyledButton>
-          </StyledBasicDiv>
+          </StyledDivInput>
         ) : emailOrUsername === 'username' ? (
-          <StyledBasicDiv>
+          <StyledDivInput>
             <Input
               type="text"
               onChange={handleUsername}
-              placeholder="write your username"
+              placeholder="Write your username"
             />
             <StyledButton type="primary" size="large" onClick={handleQuestion}>
               Find Question
             </StyledButton>
-          </StyledBasicDiv>
+          </StyledDivInput>
         ) : null}
         {forgotQuestion ? forgotPasswordForm : null}
-
         <Modal
           visible={resetModal}
           title="Reset Password"
@@ -287,7 +296,7 @@ const AccessByForgotPassword = () => {
           />
         </Modal>
       </StyledDivWrapper>
-    </>
+    </StyledDivContainer>
   );
 };
 

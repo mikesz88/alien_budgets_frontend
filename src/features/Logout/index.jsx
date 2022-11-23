@@ -9,13 +9,14 @@ import { useAuthServiceProvider } from '../../services/AuthServiceProvider';
 import { useGameServiceProvider } from '../../services/GameServiceProvider';
 import { useClassroomServiceProvider } from '../../services/ClassroomServiceProvider';
 import AlienImages from '../../components/AlienImages';
+import Routes from '../../common/routes';
 
 const Logout = () => {
   const { logout: userLogout } = useAuthServiceProvider();
   const { resetGame } = useGameServiceProvider();
   const { resetClassroom } = useClassroomServiceProvider();
   const navigate = useNavigate();
-  const backToHome = () => navigate('/');
+  const backToHome = () => navigate(Routes.hero);
 
   const logout = () => {
     userLogout()

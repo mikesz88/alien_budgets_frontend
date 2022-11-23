@@ -9,6 +9,7 @@ import {
   StyledStudentTemplate,
 } from './styles';
 import { useAuthServiceProvider } from '../../services/AuthServiceProvider';
+import Routes from '../../common/routes';
 
 const GreetingBar = ({
   adult,
@@ -23,10 +24,10 @@ const GreetingBar = ({
 
   const backToHome = () =>
     !user.isLoggedIn
-      ? navigate('/')
+      ? navigate(Routes.hero)
       : user.role === 'adult'
-      ? navigate('/dashboard')
-      : navigate('/aliendashboard');
+      ? navigate(Routes.dashboard)
+      : navigate(Routes.studentDashboard);
 
   return (
     <>
@@ -45,7 +46,7 @@ const GreetingBar = ({
           <StyledButton type="text" onClick={backToHome}>
             <StyledTitleFont>ALIEN BUDGETS</StyledTitleFont>
           </StyledButton>
-          <StyledButton type="text" onClick={() => navigate(`/challenge/play`)}>
+          <StyledButton type="text" onClick={() => navigate(Routes.challenge)}>
             Play Game
           </StyledButton>
           <StyledStudentTemplate>{username}</StyledStudentTemplate>

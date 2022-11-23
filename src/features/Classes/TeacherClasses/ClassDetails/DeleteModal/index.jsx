@@ -12,6 +12,7 @@ import {
 import StyledBasicDiv from '../../../../../components/BasicDiv';
 import { useAuthServiceProvider } from '../../../../../services/AuthServiceProvider';
 import { useClassroomServiceProvider } from '../../../../../services/ClassroomServiceProvider';
+import Routes from '../../../../../common/routes';
 
 const DeleteModal = ({ open, close, classId }) => {
   const { getBearerHeader, deleteSelectedStudents } = useAuthServiceProvider();
@@ -33,7 +34,7 @@ const DeleteModal = ({ open, close, classId }) => {
               'Students deleted',
               'Students linked to this adult account have also been deleted.'
             );
-            navigate('/dashboard');
+            navigate(Routes.dashboard);
           })
           .catch(() =>
             Notification(

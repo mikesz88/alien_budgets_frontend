@@ -26,6 +26,7 @@ import StyledBasicDiv from '../../../components/BasicDiv';
 import { useAuthServiceProvider } from '../../../services/AuthServiceProvider';
 import { useAvatarServiceProvider } from '../../../services/AvatarServiceProvider';
 import AlienImages from '../../../components/AlienImages';
+import Routes from '../../../common/routes';
 
 const RegisterAdultPart2 = () => {
   const { registerAdult } = useAuthServiceProvider();
@@ -120,7 +121,7 @@ const RegisterAdultPart2 = () => {
     setLoading(true);
     registerAdult(values)
       .then(() => {
-        navigate('/dashboard');
+        navigate(Routes.dashboard);
         Notification(success, 'Sign Up Successful', 'You are now logged in!');
       })
       .catch(() =>

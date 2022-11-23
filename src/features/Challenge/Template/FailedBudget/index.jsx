@@ -18,6 +18,7 @@ import {
   StyledH1CenteredAndBottom,
 } from './style';
 import Notification from '../../../../components/Notification';
+import Routes from '../../../../common/routes';
 
 const FailedBudget = () => {
   const navigate = useNavigate();
@@ -175,7 +176,7 @@ const FailedBudget = () => {
         </StyledDivMarginBottom>
         <StyledButton
           type="primary"
-          onClick={() => navigate('/aliendashboard')}
+          onClick={() => navigate(Routes.studentDashboard)}
         >
           Back to Dashboard
         </StyledButton>

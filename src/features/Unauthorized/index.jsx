@@ -4,11 +4,12 @@ import { Result } from 'antd';
 import StyledButton from '../../components/PrimaryButton';
 import HeroScreenDivWrapper from '../../components/Hero/HeroScreenDivWrapper';
 import AlienImages from '../../components/AlienImages';
+import Routes from '../../common/routes';
 
 const FourOhFour = () => {
   const navigate = useNavigate();
 
-  const backToHome = () => navigate('/');
+  const backToHome = () => navigate(Routes.hero);
 
   return (
     <HeroScreenDivWrapper>

@@ -16,6 +16,7 @@ import {
   StyledBasicFormItem,
 } from './styles';
 import AlienImages from '../../../components/AlienImages';
+import Routes from '../../../common/routes';
 
 const RegisterStudentPart1 = () => {
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ const RegisterStudentPart1 = () => {
     try {
       registerStudentPart1(userData);
       form.resetFields();
-      navigate('/register/student/part2');
+      navigate(Routes.registerStudentPart2);
       Notification(success, SUCCESS, 'Part 1 completed!');
     } catch (err) {
       Notification(
@@ -212,7 +213,7 @@ const RegisterStudentPart1 = () => {
             Next Page
           </StyledButton>
           <StyledButton larger="true" type="primary">
-            <Link to="/">Back to Main Page</Link>
+            <Link to={Routes.hero}>Back to Main Page</Link>
           </StyledButton>
         </StyledCenteredFormItem>
       </Form>

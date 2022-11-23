@@ -11,11 +11,17 @@ import {
   success,
 } from '../../common/constants';
 import Notification from '../../components/Notification';
-import StyledMarginTitle from './styles';
+import {
+  StyledDivPasswordInfo,
+  StyledDivWrapper,
+  StyledForm,
+  StyledFormItem,
+  StyledMarginTitle,
+} from './styles';
 import StyledCenteredFormItem from '../../components/CenteredFormItem';
-import StyledBasicDiv from '../../components/BasicDiv';
 import { useAuthServiceProvider } from '../../services/AuthServiceProvider';
 import AlienImages from '../../components/AlienImages';
+import Routes from '../../common/routes';
 
 const ResetPasswordByEmail = () => {
   const { resetPasswordByToken } = useAuthServiceProvider();
@@ -27,7 +33,7 @@ const ResetPasswordByEmail = () => {
 
   const goToLogin = () => {
     setSuccessResult(false);
-    navigate('/login/adult');
+    navigate(Routes.adultLogin);
   };
 
   const resetPassword = (password) => {
@@ -53,18 +59,18 @@ const ResetPasswordByEmail = () => {
   };
 
   return (
-    <>
+    <StyledDivWrapper>
       <AlienImages />
       <GreetingBar template="Reset Password" />
       <StyledMarginTitle>Reset Password</StyledMarginTitle>
-      <Form layout="vertical" form={form} id={form} onFinish={onFinish}>
+      <StyledForm layout="vertical" form={form} id={form} onFinish={onFinish}>
         <Form.Item noStyle>
-          <StyledBasicDiv>
+          <StyledDivPasswordInfo>
             Your new password must be 8-20 characters, including: at least one
             capital letter, at least one small letter, one number and one
             special character - ! @ # $ % ^ & * ( ) _ +
-          </StyledBasicDiv>
-          <Form.Item
+          </StyledDivPasswordInfo>
+          <StyledFormItem
             name="password"
             hasFeedback
             register="true"
@@ -92,9 +98,9 @@ const ResetPasswordByEmail = () => {
             ]}
           >
             <Input.Password type="password" placeholder="Password" />
-          </Form.Item>
+          </StyledFormItem>
         </Form.Item>
-        <Form.Item
+        <StyledFormItem
           name="confirm"
           dependencies={['password']}
           hasFeedback
@@ -117,11 +123,8 @@ const ResetPasswordByEmail = () => {
           ]}
         >
           <Input.Password type="password" placeholder="Confirm Password" />
-        </Form.Item>
+        </StyledFormItem>
         <StyledCenteredFormItem>
-          <StyledBasicDiv>
-            By signing up you agree to our terms and policies.
-          </StyledBasicDiv>
           <StyledButton
             loading={loading}
             larger="true"
@@ -131,8 +134,7 @@ const ResetPasswordByEmail = () => {
             Submit
           </StyledButton>
         </StyledCenteredFormItem>
-      </Form>
-
+      </StyledForm>
       <Modal
         visible={successResult}
         footer={[
@@ -152,7 +154,7 @@ const ResetPasswordByEmail = () => {
           subTitle="You have successfully change your password. Please click close out and sign in again with your new password. Close the button below to get back to the login screen."
         />
       </Modal>
-    </>
+    </StyledDivWrapper>
   );
 };
 

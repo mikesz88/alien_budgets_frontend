@@ -6,9 +6,15 @@ import StyledButton from '../../../components/PrimaryButton';
 import GreetingBar from '../../../components/GreetingBar';
 import Notification from '../../../components/Notification';
 import { ERROR, error, SUCCESS, success } from '../../../common/constants';
-import { StyledDivWrapper, StyledFormItem } from './styles';
+import {
+  StyledDivContainer,
+  StyledDivWrapper,
+  StyledForm,
+  StyledFormItem,
+} from './styles';
 import { useAuthServiceProvider } from '../../../services/AuthServiceProvider';
 import AlienImages from '../../../components/AlienImages';
+import Routes from '../../../common/routes';
 
 const AccessByEmail = () => {
   const { resetPasswordByEmail } = useAuthServiceProvider();
@@ -20,7 +26,7 @@ const AccessByEmail = () => {
 
   const handleClose = () => {
     setSuccessResult(false);
-    navigate('/');
+    navigate(Routes.hero);
   };
 
   const handleFailedClose = () => setFailedResult(false);
@@ -49,12 +55,17 @@ const AccessByEmail = () => {
   };
 
   return (
-    <>
+    <StyledDivContainer>
       <AlienImages />
       <GreetingBar template="Reset Password by Email" />
       <StyledDivWrapper>
         <StyledTitle>Write Email</StyledTitle>
-        <Form layout="vertical" name="Email" onFinish={onFinish} form={form}>
+        <StyledForm
+          layout="vertical"
+          name="Email"
+          onFinish={onFinish}
+          form={form}
+        >
           <Form.Item
             name="email"
             rules={[
@@ -65,7 +76,7 @@ const AccessByEmail = () => {
               },
             ]}
           >
-            <Input type="email" />
+            <Input placeholder="Write your email" type="email" />
           </Form.Item>
           <StyledFormItem>
             <StyledButton
@@ -77,7 +88,7 @@ const AccessByEmail = () => {
               Submit
             </StyledButton>
           </StyledFormItem>
-        </Form>
+        </StyledForm>
         <Modal
           visible={successResult}
           footer={[
@@ -112,7 +123,7 @@ const AccessByEmail = () => {
           />
         </Modal>
       </StyledDivWrapper>
-    </>
+    </StyledDivContainer>
   );
 };
 

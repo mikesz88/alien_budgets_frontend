@@ -7,7 +7,7 @@ export const StyledFormItem = styled(Form.Item)`
 `;
 
 export const StyledDivWrapper = styled.div`
-  margin: 6rem;
+  padding-top: 6rem;
 `;
 
 export const StyledExtraTitle = styled(StyledTitle)`
@@ -16,4 +16,32 @@ export const StyledExtraTitle = styled(StyledTitle)`
 
 export const StyledWidthFormItem = styled(Form.Item)`
   width: 100%;
+`;
+
+export const StyledForm = styled(Form)`
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 2rem auto 0;
+`;
+
+export const StyledDivContainer = styled.div`
+  background-color: ${({ theme }) => theme.colors.lightGrey};
+  min-height: 100vh;
+`;
+
+export const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const StyledDivInput = styled.div`
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 2rem auto 0;
 `;

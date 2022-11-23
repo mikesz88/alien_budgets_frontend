@@ -1,3 +1,5 @@
+import Routes from '../../../common/routes';
+
 const loginButtons = [
   {
     larger: 'true',
@@ -11,28 +13,28 @@ const loginButtons = [
     type: 'primary',
     htmlType: false,
     buttonText: 'New Adult',
-    Link: '/register/adult/part1',
+    Link: Routes.registerAdultPart1,
   },
   {
     larger: 'true',
     type: 'primary',
     htmlType: false,
     buttonText: 'Forgot Password? Use Forgot Question',
-    Link: '/forgotpassword/question',
+    Link: Routes.accessByForgotPassword,
   },
   {
     larger: 'true',
     type: 'primary',
     htmlType: false,
     buttonText: 'Forgot Password? Find by Email',
-    Link: '/forgotpassword/email',
+    Link: Routes.accessByEmail,
   },
   {
     larger: 'true',
     type: 'primary',
     htmlType: false,
     buttonText: 'Back to Main Page',
-    Link: '/',
+    Link: Routes.hero,
   },
 ];
 

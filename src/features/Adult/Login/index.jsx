@@ -16,6 +16,7 @@ import {
   StyledInputPassword,
   StyledCenteredDivVaried,
 } from './styles';
+import Routes from '../../../common/routes';
 
 const AdultLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const AdultLogin = () => {
           'Login Successful',
           'You are now currently logged in.'
         );
-        navigate('/dashboard');
+        navigate(Routes.dashboard);
       })
       .catch((err) => Notification(error, ERROR, err.response.data.error))
       .finally(() => {

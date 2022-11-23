@@ -30,6 +30,7 @@ import { useAuthServiceProvider } from '../../../services/AuthServiceProvider';
 import { useAvatarServiceProvider } from '../../../services/AvatarServiceProvider';
 import { useClassroomServiceProvider } from '../../../services/ClassroomServiceProvider';
 import AlienImages from '../../../components/AlienImages';
+import Routes from '../../../common/routes';
 
 const CreateClass = () => {
   const { user, getBearerHeader, getAllForgotQuestions } =
@@ -88,7 +89,7 @@ const CreateClass = () => {
   }, []);
 
   const goToClassDetails = () =>
-    navigate(`/classrooms/teacher/details/${newClassId}`);
+    navigate(`${Routes.classDetails}${newClassId}`);
 
   const createStudentsInfo = async (students, chosenClassroomCode) => {
     const studentListWithInfo = [];

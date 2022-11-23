@@ -21,6 +21,7 @@ import StyledBasicDiv from '../../../../components/BasicDiv';
 import { useAuthServiceProvider } from '../../../../services/AuthServiceProvider';
 import { useClassroomServiceProvider } from '../../../../services/ClassroomServiceProvider';
 import AlienImages from '../../../../components/AlienImages';
+import Routes from '../../../../common/routes';
 
 const ClassDetails = () => {
   const { classId } = useParams();
@@ -233,7 +234,7 @@ const ClassDetails = () => {
       <StyledButton
         size="large"
         type="primary"
-        onClick={() => navigate(`/classrooms/teacher/${user.id}`)}
+        onClick={() => navigate(`${Routes.teacherClasses}${user.id}`)}
       >
         Back to My Classes
       </StyledButton>

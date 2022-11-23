@@ -7,6 +7,7 @@ import StyledButton from '../../components/PrimaryButton';
 import HeroScreenDivWrapper from '../../components/Hero/HeroScreenDivWrapper';
 import { useAuthServiceProvider } from '../../services/AuthServiceProvider';
 import AlienImages from '../../components/AlienImages';
+import Routes from '../../common/routes';
 
 const Mobile = () => {
   const { user } = useAuthServiceProvider();
@@ -16,10 +17,10 @@ const Mobile = () => {
 
   const backToHome = () =>
     user.role === 'adult'
-      ? navigate('/dashboard')
+      ? navigate(Routes.dashboard)
       : user.role === 'student'
-      ? navigate('/aliendashboard')
-      : navigate('/');
+      ? navigate(Routes.studentDashboard)
+      : navigate(Routes.hero);
 
   const checkWidth = () => setWidth(window.screen.width);
 

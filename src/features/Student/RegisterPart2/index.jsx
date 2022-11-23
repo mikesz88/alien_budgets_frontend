@@ -36,6 +36,7 @@ import {
   StyledPasswordRules,
   StyledUsernameWrapper,
 } from './style';
+import Routes from '../../../common/routes';
 
 const RegisterStudentPart2 = () => {
   const { registerStudent } = useAuthServiceProvider();
@@ -191,7 +192,7 @@ const RegisterStudentPart2 = () => {
           'You are now currently logged in.'
         );
         addStudentToClassroom(res.user);
-        navigate('/aliendashboard');
+        navigate(Routes.studentDashboard);
         form.resetFields();
       })
       .catch(() =>

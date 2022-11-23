@@ -36,6 +36,7 @@ import Notification from '../components/Notification';
 import { SUCCESS, success } from '../common/constants';
 import Mobile from '../features/Mobile';
 import { useAuthServiceProvider } from '../services/AuthServiceProvider';
+import RouteLinks from '../common/routes';
 
 export const PrivateRoute = ({ user, children, ...props }) => {
   const { user: currentUser } = useAuthServiceProvider();
@@ -83,7 +84,7 @@ const Routes = () => {
       .then((res) => {
         if (res.role === 'adult') {
           const { firstName, lastName } = res;
-          navigate('/dashboard');
+          navigate(RouteLinks.dashboard);
           Notification(
             success,
             SUCCESS,
@@ -92,7 +93,7 @@ const Routes = () => {
         } else {
           const { username } = res;
           Notification(success, SUCCESS, `Welcome back ${username}!`);
-          navigate('/aliendashboard');
+          navigate(RouteLinks.studentDashboard);
         }
       })
       .catch(() => Notification('info', 'No user', 'Please login!'));
@@ -119,15 +120,15 @@ const Routes = () => {
 
   return (
     <RouteWrapper>
-      <Route path="/" element={<Hero />} exact />
-      <Route path="/login/student" element={<StudentLogin />} exact />
+      <Route path={RouteLinks.hero} element={<Hero />} exact />
+      <Route path={RouteLinks.studentLogin} element={<StudentLogin />} exact />
       <Route
-        path="/register/student/part1"
+        path={RouteLinks.registerStudentPart1}
         element={<RegisterStudentPart1 />}
         exact
       />
       <Route
-        path="/register/student/part2"
+        path={RouteLinks.registerStudentPart2}
         element={
           <Part1RegisterRequire user="student">
             <RegisterStudentPart2 />
@@ -136,12 +137,12 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/register/adult/part1"
+        path={RouteLinks.registerAdultPart1}
         element={<RegisterAdultPart1 />}
         exact
       />
       <Route
-        path="/register/adult/part2"
+        path={RouteLinks.registerAdultPart2}
         element={
           <Part1RegisterRequire user="adult">
             <RegisterAdultPart2 />
@@ -149,9 +150,9 @@ const Routes = () => {
         }
         exact
       />
-      <Route path="/login/adult" element={<AdultLogin />} exact />
+      <Route path={RouteLinks.adultLogin} element={<AdultLogin />} exact />
       <Route
-        path="/aliendashboard"
+        path={RouteLinks.studentDashboard}
         element={
           <PrivateRoute user="student">
             <StudentDashboard />
@@ -160,7 +161,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/dashboard"
+        path={RouteLinks.dashboard}
         element={
           <PrivateRoute user="adult">
             <AdultDashboard />
@@ -169,7 +170,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/challenge/play"
+        path={RouteLinks.challenge}
         element={
           <PrivateRoute user="student">
             <Challenge />
@@ -178,7 +179,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/classrooms/teacher/:teacherId"
+        path={`${RouteLinks.teacherClasses}:teacherId`}
         element={
           <PrivateRoute user="adult">
             <TeacherClasses />
@@ -187,7 +188,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/classrooms/teacher/details/:classId"
+        path={`${RouteLinks.classDetails}:classId`}
         element={
           <PrivateRoute user="adult">
             <ClassDetails />
@@ -196,7 +197,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/classrooms/leaderboard/:class"
+        path={`${RouteLinks.leaderboard}:class`}
         element={
           <PrivateRoute user="student">
             <Leaderboard />
@@ -205,20 +206,32 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/forgotpassword/question"
+        path={RouteLinks.accessByForgotPassword}
         element={<AccessByForgotPassword />}
         exact
       />
       <Route
-        path="/forgotpassword/resetbyemail/:resettoken"
+        path={`${RouteLinks.resetPasswordByEmail}:resettoken`}
         element={<ResetPasswordByEmail />}
         exact
       />
-      <Route path="/privacypolicy" element={<PrivacyPolicy />} exact />
-      <Route path="/termsofservice" element={<TermsOfService />} exact />
-      <Route path="/forgotpassword/email" element={<AccessByEmail />} exact />
       <Route
-        path="/classrooms/create"
+        path={RouteLinks.privacyPolicy}
+        element={<PrivacyPolicy />}
+        exact
+      />
+      <Route
+        path={RouteLinks.termsOfService}
+        element={<TermsOfService />}
+        exact
+      />
+      <Route
+        path={RouteLinks.accessByEmail}
+        element={<AccessByEmail />}
+        exact
+      />
+      <Route
+        path={RouteLinks.createClass}
         element={
           <PrivateRoute user="adult">
             <CreateClass />
@@ -227,7 +240,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/stats/:user"
+        path={`${RouteLinks.stats}:user`}
         element={
           <PrivateRoute user="student">
             <Stats />
@@ -236,7 +249,7 @@ const Routes = () => {
         exact
       />
       <Route
-        path="/account"
+        path={RouteLinks.account}
         element={
           <PrivateRoute user={'student' || 'adult'}>
             <Account />
@@ -244,11 +257,11 @@ const Routes = () => {
         }
         exact
       />
-      <Route path="/logout" element={<Logout />} exact />
-      <Route path="*" element={<FourOhFour />} />
-      <Route path="/unauthorized" element={<Unauthorized />} exact />
-      <Route path="/deleted" element={<DeletedAccount />} exact />
-      <Route path="/mobile" element={<Mobile />} exact />
+      <Route path={RouteLinks.logout} element={<Logout />} exact />
+      <Route path={RouteLinks.fourOhFour} element={<FourOhFour />} />
+      <Route path={RouteLinks.unauthorized} element={<Unauthorized />} exact />
+      <Route path={RouteLinks.deleted} element={<DeletedAccount />} exact />
+      <Route path={RouteLinks.mobile} element={<Mobile />} exact />
     </RouteWrapper>
   );
 };

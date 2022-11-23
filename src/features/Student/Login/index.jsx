@@ -16,6 +16,7 @@ import {
   StyledInputPassword,
   StyledInputWrapper,
 } from './styles';
+import Routes from '../../../common/routes';
 
 const StudentLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const StudentLogin = () => {
           'Login Successful',
           'You are now currently logged in.'
         );
-        navigate('/aliendashboard');
+        navigate(Routes.studentDashboard);
       })
       .catch((err) => Notification(error, ERROR, err.response.data.error))
       .finally(() => {
@@ -88,20 +89,20 @@ const StudentLogin = () => {
             </StyledCenteredDivVaried>
             <StyledCenteredDivVaried width={300}>
               <StyledButtonMargin larger="true" type="primary">
-                <Link to="/register/student/part1">New Alien</Link>
+                <Link to={Routes.registerStudentPart1}>New Alien</Link>
               </StyledButtonMargin>
             </StyledCenteredDivVaried>
           </StyledCenteredDivVaried>
           <StyledCenteredDivVaried marginTop={4}>
             <StyledButton larger="true" type="primary">
-              <Link to="/forgotpassword/question">
+              <Link to={Routes.accessByForgotPassword}>
                 Forgot Password? Use Forgot Question
               </Link>
             </StyledButton>
           </StyledCenteredDivVaried>
           <StyledCenteredDivVaried marginTop={4}>
             <StyledButton larger="true" type="primary">
-              <Link to="/">Back to Main Page</Link>
+              <Link to={Routes.hero}>Back to Main Page</Link>
             </StyledButton>
           </StyledCenteredDivVaried>
         </Form.Item>

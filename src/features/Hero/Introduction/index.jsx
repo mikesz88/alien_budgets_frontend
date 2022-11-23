@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Routes from '../../../common/routes';
 import HeroButtonWrapper from '../../../components/Hero/HeroButtonWrapper';
 import HeroDivContainer from '../../../components/Hero/HeroDivContainer';
 import HeroFooter from '../../../components/Hero/HeroFooter';
@@ -23,8 +24,8 @@ const Introduction = ({ chooseAdult, chooseStudent }) => (
       </StyledButton>
       <StyledCaption centered>
         By going forward you are agreeing to the{' '}
-        <Link to="/privacypolicy">Privacy Policy</Link> and{' '}
-        <Link to="/termsofservice">Terms of Service</Link>
+        <Link to={Routes.privacyPolicy}>Privacy Policy</Link> and{' '}
+        <Link to={Routes.termsOfService}>Terms of Service</Link>
       </StyledCaption>
     </HeroButtonWrapper>
     <HeroFooter>
