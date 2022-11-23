@@ -46,7 +46,7 @@ export const PrivateRoute = ({ user, children, ...props }) => {
     return (
       <Navigate
         {...props}
-        to={RouteLinks.unauthorized}
+        to={RouteLinks.fourOhFour}
         state={{ from: location }}
         replace
       />
