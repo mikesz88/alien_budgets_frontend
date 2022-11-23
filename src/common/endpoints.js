@@ -35,7 +35,7 @@ const Endpoints = {
   resetStudentPassword: URL_ADULT,
   getStudentInfo: URL_STUDENT,
   updateStudentByAdult: `${URL_ADULT}/updatestudent`,
-  updateStudentInClassroom: `${URL_CLASSROOMS}/updateStudent`,
+  updateStudentInClassroom: `${URL_CLASSROOMS}/updatestudent`,
   addStudentToClassroom: `${URL_CLASSROOMS}/addstudent`,
   deleteAllClassroomsByTeacher: `${URL_CLASSROOMS}/deleteteacher`,
   deleteSelectedStudents: `${URL_AUTH}/deletestudents`,

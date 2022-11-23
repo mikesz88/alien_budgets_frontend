@@ -42,9 +42,9 @@ const AccessByEmail = () => {
           'Email has been sent. Please check your email.'
         );
       })
-      .catch(() => {
+      .catch((err) => {
         setFailedResult(true);
-        Notification(error, ERROR, 'No email found. Please try again.');
+        Notification(error, ERROR, err.response.data.error);
       })
       .finally(() => setLoading(false));
   };

@@ -33,7 +33,7 @@ import AlienImages from '../../../components/AlienImages';
 import Routes from '../../../common/routes';
 
 const CreateClass = () => {
-  const { user, getBearerHeader, getAllForgotQuestions } =
+  const { user, getBearerHeader, getAllForgotQuestions, updateAdultProfile } =
     useAuthServiceProvider();
   const { getRandomAvatar: getOneRandomAvatar } = useAvatarServiceProvider();
   const { createClassroom: createNewClassroom } = useClassroomServiceProvider();
@@ -121,6 +121,9 @@ const CreateClass = () => {
         setNewClassId(res.id);
         setNewStudentData(res.students);
         setNewClassroomRoster(true);
+        updateAdultProfile({
+          classrooms: [...user.classrooms, body.classroomCode],
+        });
         Notification(
           success,
           SUCCESS,
