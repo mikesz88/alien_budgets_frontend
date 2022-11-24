@@ -15,14 +15,16 @@ export const StyledRegisterPart2Container = styled.div`
 `;
 
 export const StyledGradeLevelContainer = styled(Form.Item)`
-  display: flex;
-  justify-content: center;
   margin: 1rem auto;
-  align-items: center;
   font-weight: bold;
   font-size: 2rem;
 `;
 
 export const StyledCenteredFormItem = styled(Form.Item)`
   text-align: center;
+`;
+
+export const StyledGradeLevelWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;

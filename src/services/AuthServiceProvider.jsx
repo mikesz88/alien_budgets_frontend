@@ -404,11 +404,30 @@ export const AuthServiceProvider = ({ children }) => {
   };
 
   // Auth
+  const getUser = async (header) => {
+    const headers = header || getBearerHeader();
+    const { data: response } = await axios.get(Endpoints.getLoggedInUser, {
+      headers,
+    });
+    resetForgotPassword();
+    clearPassword();
+    if (response.data.role === 'student') {
+      setStudentData(response.data);
+    } else {
+      setAdultData(response.data);
+    }
+    return response.data;
+  };
+
+  // Auth
   const registerStudent = async (userData) => {
     registerStudentPart2(userData);
     const body = getStudentData();
     body.password = userData.password;
     body.forgotPasswordAnswer = user.forgotPasswordAnswer;
+    body.avatarColor = userData.avatarColor;
+    body.avatarURL = userData.avatarURL;
+    body.username = userData.username;
     const { data: response } = await axios.post(
       Endpoints.registerStudent,
       body
@@ -427,12 +446,15 @@ export const AuthServiceProvider = ({ children }) => {
     const body = getAdultData();
     body.password = user.password;
     body.forgotPasswordAnswer = user.forgotPasswordAnswer;
+    body.avatarColor = userData.avatarColor;
+    body.avatarURL = userData.avatarURL;
+    body.gradeLevel = userData.gradeLevel;
     const { data: response } = await axios.post(Endpoints.registerAdult, body);
     setAuthToken(response.token);
     setBearerHeader(response.token);
     localStorage.setItem('token', response.token);
     setIsLoggedIn(true);
-    await getUser();
+    // await getUser();
     return response;
   };
 
@@ -466,22 +488,6 @@ export const AuthServiceProvider = ({ children }) => {
       body
     );
     return response;
-  };
-
-  // Auth
-  const getUser = async (header) => {
-    const headers = header || getBearerHeader();
-    const { data: response } = await axios.get(Endpoints.getLoggedInUser, {
-      headers,
-    });
-    resetForgotPassword();
-    clearPassword();
-    if (response.data.role === 'student') {
-      setStudentData(response.data);
-    } else {
-      setAdultData(response.data);
-    }
-    return response.data;
   };
 
   // Auth

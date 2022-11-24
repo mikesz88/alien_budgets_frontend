@@ -7,6 +7,7 @@ import {
   StyledGradeLevelContainer,
   StyledRegisterPart2Container,
   StyledCenteredFormItem,
+  StyledGradeLevelWrapper,
 } from './styles';
 import StyledPagination from '../../../components/Pagination';
 import StyledRadioGroup from '../../../components/RadioGroup';
@@ -124,9 +125,10 @@ const RegisterAdultPart2 = () => {
         navigate(Routes.dashboard);
         Notification(success, 'Sign Up Successful', 'You are now logged in!');
       })
-      .catch(() =>
-        Notification(error, ERROR, 'There was an error. Please try again!')
-      )
+      .catch((err) => {
+        console.error(err);
+        Notification(error, ERROR, 'There was an error. Please try again!');
+      })
       .finally(() => setLoading(false));
   };
 
@@ -167,24 +169,26 @@ const RegisterAdultPart2 = () => {
             />
           </Form.Item>
         </StyledRegisterPart2Container>
-        <StyledGradeLevelContainer
-          name="gradeLevel"
-          label="Grade Level"
-          rules={[
-            {
-              required: true,
-              message: 'Please select a grade level!',
-            },
-          ]}
-        >
-          <Checkbox.Group>
-            <Row>
-              <Checkbox value="4th">4th</Checkbox>
-              <Checkbox value="5th">5th</Checkbox>
-              <Checkbox value="6th">6th</Checkbox>
-            </Row>
-          </Checkbox.Group>
-        </StyledGradeLevelContainer>
+        <StyledGradeLevelWrapper>
+          <StyledGradeLevelContainer
+            name="gradeLevel"
+            label="Grade Level"
+            rules={[
+              {
+                required: true,
+                message: 'Please select a grade level!',
+              },
+            ]}
+          >
+            <Checkbox.Group>
+              <Row>
+                <Checkbox value="4th">4th</Checkbox>
+                <Checkbox value="5th">5th</Checkbox>
+                <Checkbox value="6th">6th</Checkbox>
+              </Row>
+            </Checkbox.Group>
+          </StyledGradeLevelContainer>
+        </StyledGradeLevelWrapper>
         <StyledCenteredFormItem register="true">
           <StyledBasicDiv>
             By signing up you agree to our terms and policies.
