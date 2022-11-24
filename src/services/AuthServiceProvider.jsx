@@ -436,7 +436,6 @@ export const AuthServiceProvider = ({ children }) => {
     setBearerHeader(response.token);
     localStorage.setItem('token', response.token);
     setIsLoggedIn(true);
-    await getUser();
     return response;
   };
 
@@ -454,7 +453,6 @@ export const AuthServiceProvider = ({ children }) => {
     setBearerHeader(response.token);
     localStorage.setItem('token', response.token);
     setIsLoggedIn(true);
-    // await getUser();
     return response;
   };
 
