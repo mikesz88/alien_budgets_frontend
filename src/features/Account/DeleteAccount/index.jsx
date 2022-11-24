@@ -6,6 +6,7 @@ import StyledBasicDiv from '../../../components/BasicDiv';
 import { ERROR, error, SUCCESS, success } from '../../../common/constants';
 import { useAuthServiceProvider } from '../../../services/AuthServiceProvider';
 import { useClassroomServiceProvider } from '../../../services/ClassroomServiceProvider';
+import Routes from '../../../common/routes';
 
 const DeleteAccount = () => {
   const [loading, setLoading] = useState(false);
@@ -23,9 +24,10 @@ const DeleteAccount = () => {
     deleteMyself()
       .then((res) => {
         Notification(success, SUCCESS, res.message);
-        navigate('/deleted');
+        navigate(Routes.deleted);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         Notification(error, ERROR, 'There was a connection error');
       })
       .finally(() => setLoading(false));

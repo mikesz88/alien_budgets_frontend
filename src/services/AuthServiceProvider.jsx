@@ -579,7 +579,13 @@ export const AuthServiceProvider = ({ children }) => {
   // Auth
   const deleteSelf = async () => {
     const headers = getBearerHeader();
-    const { data: response } = await axios.put(Endpoints.deleteSelf, headers);
+    const { data: response } = await axios.put(
+      Endpoints.deleteSelf,
+      {},
+      {
+        headers,
+      }
+    );
     localStorage.removeItem('token');
     resetUser();
     return response;
